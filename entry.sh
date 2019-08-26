@@ -25,6 +25,12 @@ if [ ! "$(ls -A /var/spool/postfix)" ]; then
    cp -a /var/spool/postfix.cache/. /var/spool/postfix/
 fi
 
+# Change defaults
+sed -i \
+  -e "s|%DEFAULT_EMAIL_HOST%|$MAILMAN_EMAILHOST|" \
+  -e "s|%DEFAULT_URL_HOST%|$MAILMAN_URLHOST|" \
+  /etc/mailman/mm_cfg.py
+
 # Fix permissions
 /usr/lib/mailman/bin/check_perms -f
 
@@ -37,7 +43,7 @@ fi
 mmsitepass $MAILMAN_ADMINPASS
 
 # Fix Postfix settings
-postconf -e mydestination=${MAILMAN_EMAILHOST}
+postconf -e mydestination='$myhostname'
 postconf -e myhostname=${HOSTNAME}
 
 # 20MB size limit
@@ -51,7 +57,7 @@ if [ -n "$MAILMAN_SSL_CRT" ] && [ -n "$MAILMAN_SSL_KEY" ] && [ -n "$MAILMAN_SSL_
 fi
 
 # Init Postfix Config
-/usr/lib/mailman/bin/genaliases -q >> /etc/aliases
+/usr/lib/mailman/bin/genaliases -q > /etc/aliases
 newaliases
 
 exec $@
