@@ -2,13 +2,10 @@ FROM debian:jessie
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y nginx mailman postfix supervisor fcgiwrap multiwatch busybox-syslogd locales && \
-    apt-get -y install vim && \
     rm -rf /var/lib/apt/lists/* && \
     # Configure Nginx
     sed -i -e 's@worker_processes 4@worker_processes 1@g' /etc/nginx/nginx.conf && \
     rm -f /etc/nginx/sites-enabled/default && \
-    # Configure Mailman
-    sed -i -e "s@^DEFAULT_URL_PATTERN.*@DEFAULT_URL_PATTERN = \'http://%s/\'@g" /etc/mailman/mm_cfg.py && \
     # Cache default dirs as template (must come after configuration)
     cp -a /etc/mailman /etc/mailman.cache && \
     cp -a /var/lib/mailman /var/lib/mailman.cache && \
@@ -16,6 +13,7 @@ RUN apt-get update && \
 
 ADD nginx.conf /etc/nginx/conf.d/
 ADD supervisord.conf /etc/supervisor/supervisord.conf
+ADD mm_cfg.py /etc/mailmal/mm_cfg.py
 ADD *.sh /
 
 EXPOSE 25 80
