@@ -13,7 +13,7 @@ RUN apt-get update && \
 
 ADD nginx.conf /etc/nginx/conf.d/
 ADD supervisord.conf /etc/supervisor/supervisord.conf
-ADD mm_cfg.py /etc/mailmal/mm_cfg.py
+ADD mm_cfg.py /etc/mailman/mm_cfg.py
 ADD *.sh /
 
 EXPOSE 25 80
