@@ -60,4 +60,8 @@ fi
 /usr/lib/mailman/bin/genaliases -q > /etc/aliases
 newaliases
 
+ln -s /usr/lib/mailman/bin/mailmanctl /etc/init.d/mailman
+mkdir /var/run/mailman
+chown list:list /var/run/mailman
+
 exec $@
