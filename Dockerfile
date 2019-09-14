@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:buster-slim
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y nginx mailman postfix supervisor fcgiwrap multiwatch busybox-syslogd locales && \
